@@ -14,10 +14,22 @@ model User {
   username String @db.VarChar(255) @unique
   email String @db.VarChar(255) @unique
   password String @db.VarChar(255)
-  is_admin Boolean
+  isAdmin Boolean @default(false)
   role String @db.VarChar(255) @default("Normal User")  
   refresh_tokens RefreshToken[] 
   access_tokens AccessToken[]
+  userDetails PersonalInfos?
+}
+
+model PersonalInfos {
+  id Int @id @default(autoincrement())
+  userId Int @unique
+  firstName String @db.VarChar(255) @default(" ")
+  lastName String @db.VarChar(255)  @default(" ")
+  phoneNumber String @db.VarChar(255) @default(" ")
+  user User @relation(fields: [userId], references: [id]) 
+  
+  
 }
 
 model RefreshToken {

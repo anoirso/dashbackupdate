@@ -41,6 +41,7 @@ signRouter.post("/api/login", async (req, res) => {
         username: userFound.username,
         isAdmin: userFound.is_admin,
         email: userFound.email,
+        userDetails : userFound.userDetails,
         accessToken,
         refreshTokenG,
       });

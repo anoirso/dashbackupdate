@@ -13,6 +13,7 @@ const app = express();
 const signRouter = require("./routes/SignInOut");
 const authentication = require('./routes/AuthenticationManagement');
 const registerRouter = require('./routes/Register');
+const profileRouter = require('./routes/Profile');
 
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -25,7 +26,8 @@ app.use(
 );
 app.use("/sign", signRouter);
 app.use('/authentication' ,authentication);
-app.use('/register',registerRouter)
+app.use('/register',registerRouter);
+app.use('/profile' ,profileRouter);
 
 
 

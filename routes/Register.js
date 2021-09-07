@@ -1,7 +1,7 @@
 const express = require('express');
 const jwt = require("jsonwebtoken");
 const { PrismaClient } = require("@prisma/client");
-const { user, refreshToken, accessToken } = new PrismaClient();
+const { user, refreshToken, accessToken , personalInfos} = new PrismaClient();
 const exportedMethods = require('./Methods')
 
 
@@ -26,24 +26,34 @@ registerRouter.post("/api/register", async (req, res) => {
     if (emailExsits) {
       res.status(405).json({ message: "Email alrady exsits" });
     } else {
+
       const newUser = await user.create({
         data: {
           email: email,
           password: password,
           username: email,
-          is_admin: false,
+          isAdmin: false,
         },
       });
+      const information = await personalInfos.create({
+        data : {
+          userId : newUser.id
+        }
+      })
       const accessToken = exportedMethods.generateAccessToken(newUser);
       const refreshTokenG = exportedMethods.generateRefreshToken(newUser);
+      console.log(accessToken)
+      console.log(refreshTokenG)
       res.cookie("AccessT", accessToken);
       res.cookie("AccessRefreshT", refreshToken);
       res.json({
         username: email,
         isAdmin: false,
         email: email,
+        userDetails : information,
         accessToken,
         refreshTokenG,
+        
       });
   
     }

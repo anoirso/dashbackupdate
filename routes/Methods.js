@@ -33,13 +33,13 @@ module.exports = {
     }
   },
   generateAccessToken: (user) => {
-      return jwt.sign({ id: user.id, isAdmin: user.is_admin }, "mySecretKey", {
+      return jwt.sign({ id: user.id, isAdmin: user.isAdmin }, "mySecretKey", {
         expiresIn: "30m",
       });
 
   },
   generateRefreshToken : (user) => {
-      return jwt.sign({ id: user.id, isAdmin: user.is_admin }, "myRefreshSecretKey");
+      return jwt.sign({ id: user.id, isAdmin: user.isAdmin }, "myRefreshSecretKey");
 
   }
 };
