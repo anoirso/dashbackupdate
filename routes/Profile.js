@@ -11,7 +11,7 @@ profileRouter.get("/", (req, res) => {
 
 profileRouter.put("/setup", exportedMethods.verify, async (req, res) => {
     // The logic to check if the username is repeated needs to be evaluated later
-    const {username, firstName,lastName, phoneNumber,usernameChanged} = req.body;
+    const {username, firstName,lastName, phoneNumber,role,usernameChanged} = req.body;
     console.log(req.body);
     if (usernameChanged) {
         const userFound = await user.findFirst({
@@ -29,7 +29,8 @@ profileRouter.put("/setup", exportedMethods.verify, async (req, res) => {
                 id : req.user.id
             },
             data : {
-                username
+                username,
+                role,
             }
         })
     }
@@ -46,5 +47,9 @@ profileRouter.put("/setup", exportedMethods.verify, async (req, res) => {
 
     res.json({message : 'Changes went into effect', user : changedDetails})
 });
+
+profileRouter.get('/try_permission' ,exportedMethods.verify , exportedMethods.verifyPermissions('levelI') , async (req, res) => {
+    res.json({message : 'Your request went successfully'})
+})
 
 module.exports = profileRouter;

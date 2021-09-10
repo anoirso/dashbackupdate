@@ -15,10 +15,11 @@ model User {
   email String @db.VarChar(255) @unique
   password String @db.VarChar(255)
   isAdmin Boolean @default(false)
-  role String @db.VarChar(255) @default("Normal User")  
+  role String @db.VarChar(255) @default("")  
   refresh_tokens RefreshToken[] 
   access_tokens AccessToken[]
   userDetails PersonalInfos?
+  subscriptionType String @db.VarChar(255) @default("free")
 }
 
 model PersonalInfos {
@@ -48,6 +49,8 @@ model AccessToken {
   user User @relation(fields: [user_id], references: [id])
   user_id Int
 }
+
+
 
 
 

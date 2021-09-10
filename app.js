@@ -10,6 +10,8 @@ const { user, refreshToken, accessToken } = new PrismaClient();
 const { mapUser } = require("./functions");
 const app = express();
 
+const maps = require('./routes/Permissions'); 
+
 const signRouter = require("./routes/SignInOut");
 const authentication = require('./routes/AuthenticationManagement');
 const registerRouter = require('./routes/Register');
@@ -34,6 +36,7 @@ app.use('/profile' ,profileRouter);
 
 
 app.get("/", (req, res) => {
+  console.log(maps.mapOfPermissions().get('levelII'));
   res.json({ message: "You have reached the backend url" });
 });
 app.listen(8000, (req, res) => {});

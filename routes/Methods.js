@@ -1,7 +1,7 @@
 const { PrismaClient } = require("@prisma/client");
 const { user, refreshToken, accessToken } = new PrismaClient();
 const jwt = require("jsonwebtoken");
-
+const exportedServices = require('./Permissions')
 module.exports = {
   verify: async (req, res, next) => {
     const authHeader = req.headers.authorization;
@@ -24,7 +24,6 @@ module.exports = {
               message: "Token has been used before and not valid anymore",
             });
         }
-        console.log("You are authenticated now");
         req.user = user;
         next();
       });
@@ -33,7 +32,7 @@ module.exports = {
     }
   },
   generateAccessToken: (user) => {
-      return jwt.sign({ id: user.id, isAdmin: user.isAdmin }, "mySecretKey", {
+      return jwt.sign({ id: user.id, isAdmin: user.isAdmin , permissionsOfUser : exportedServices.mapOfPermissions().get(user.subscriptionType)}, "mySecretKey", {
         expiresIn: "30m",
       });
 
@@ -41,5 +40,18 @@ module.exports = {
   generateRefreshToken : (user) => {
       return jwt.sign({ id: user.id, isAdmin: user.isAdmin }, "myRefreshSecretKey");
 
+  },
+  // Verify function must always applied before verifyPermissions function
+  verifyPermissions : (permissionRequired) => {
+    return async (req, res, next) => {
+     const permissions = req.user.permissionsOfUser
+     console.log(permissions)
+     if (!permissions.includes(permissionRequired)) {
+       res.status(411).json({message : 'Request forbidden, you do not have the permission for that'})
+     }
+     else {
+       next();
+     }
+    }
   }
 };
