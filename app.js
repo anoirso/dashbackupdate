@@ -16,7 +16,7 @@ const authentication = require('./routes/AuthenticationManagement');
 const registerRouter = require('./routes/Register');
 const profileRouter = require('./routes/Profile');
 
-const enVar = process.env.POST_KEY
+const frontEndUrl = process.env.FRONT_END || "http://localhost:3000"
 const port = process.env.PORT || 8000
 
 app.use(express.urlencoded({ extended: false }));
@@ -24,7 +24,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: frontEndUrl,
     credentials: true,
   })
 );
@@ -40,7 +40,9 @@ app.use('/profile' ,profileRouter);
 app.get("/", (req, res) => {
   res.json({ message: enVar });
 });
-app.listen(port, (req, res) => {});
+app.listen(port, (req, res) => {
+  console.log(frontEndUrl)
+});
 
 
 
