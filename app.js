@@ -38,7 +38,7 @@ app.use('/profile' ,profileRouter);
 
 
 app.get("/", (req, res) => {
-  res.json({ message: enVar });
+  res.json({ message: frontEndUrl });
 });
 app.listen(port, (req, res) => {
   console.log(frontEndUrl)
