@@ -13,6 +13,8 @@ signRouter.get("/", (req, res) => {
 
 // Login Function
 
+const domainName = process.env.DOMAIN_NAME || 'run.app'
+
 signRouter.post("/api/login", async (req, res) => {
   const { usernameOrEmail, password } = req.body;
   var credentialsAccepted = false;
@@ -48,8 +50,8 @@ signRouter.post("/api/login", async (req, res) => {
     console.log("Reached here");
     const accessToken = exportedMethods.generateAccessToken(userFound);
     const refreshTokenG = exportedMethods.generateRefreshToken(userFound);
-    res.cookie("AccessT", accessToken);
-    res.cookie("AccessRefreshT", refreshToken);
+    res.cookie("AccessT", accessToken,{domain : domainName});
+    res.cookie("AccessRefreshT", refreshToken,{domain : domainName});
     const tokenAdded = await refreshToken.create({
       data: {
         referesh_token: refreshTokenG,
